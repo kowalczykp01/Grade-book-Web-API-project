@@ -13,7 +13,7 @@ namespace Grade_Book_API.Entities
         public string Surname { get; set; }
         public string DegreeCourse { get; set; }
         public int YearOfStudies { get; set; }
-        public int ContactEmail { get; set; }
+        public string ContactEmail { get; set; }
 
         public virtual List<Subject> Subjects { get; set; }
     }
