@@ -25,6 +25,13 @@ namespace Grade_Book_API
                     _dbContext.Students.AddRange(students);
                     _dbContext.SaveChanges();
                 }
+
+                if (!_dbContext.Subjects.Any())
+                {
+                    var subjects = GetSubjects();
+                    _dbContext.Subjects.AddRange(subjects);
+                    _dbContext.SaveChanges();
+                }
             }
         }
 
@@ -39,29 +46,41 @@ namespace Grade_Book_API
                     DegreeCourse = "Computer Science",
                     YearOfStudies = 3,
                     ContactEmail = "pawelkowalczyk@email.com",
-                    Subjects = new List<Subject>()
+                    Grades = new List<Grade>()
                     {
-                        new Subject()
+                        new Grade()
                         {
-                            Name = "Numerical methods",
-                            Grades = new List<Grade>()
-                            {
-                                new Grade()
-                                {
-                                    Description = "Exam",
-                                    Value = 10
-                                },
-                                new Grade()
-                                {
-                                    Description = "Test",
-                                    Value = 57
-                                }
-                            }
-                        }               
+                            Value = 80,
+                            SubjectId = 1002,
+                            Description = "Final exam",
+                            DateOfIssue = new DateTime(2022,10, 28)
+                        },
+                        new Grade()
+                        {
+                            Value = 95,
+                            SubjectId = 1003,
+                            Description = "Homework",
+                            DateOfIssue = new DateTime(2022,10, 22)
+                        }
                     }
                 }
             };
             return students;
+        }
+        private IEnumerable<Subject> GetSubjects()
+        {
+            var subjects = new List<Subject>()
+            {
+                new Subject()
+                {
+                    Name = "Linear algebra"
+                },
+                new Subject()
+                {
+                    Name = "Numerical methods"
+                }
+            };
+            return subjects;
         }
     }
 }

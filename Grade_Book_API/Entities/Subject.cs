@@ -11,6 +11,5 @@ namespace Grade_Book_API.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public virtual List<Grade> Grades { get; set; }
-        public virtual Student Student { get; set; }
     }
 }
