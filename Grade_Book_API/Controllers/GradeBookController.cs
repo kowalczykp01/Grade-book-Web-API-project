@@ -1,5 +1,8 @@
-﻿using Grade_Book_API.Entities;
+﻿using AutoMapper;
+using Grade_Book_API.Entities;
+using Grade_Book_API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,25 +15,30 @@ namespace Grade_Book_API.Controllers
     public class GradeBookController : ControllerBase
     {
         private readonly GradeBookDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public GradeBookController(GradeBookDbContext dbContext)
+        public GradeBookController(GradeBookDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
         [HttpGet("{id}")]
-        public ActionResult <IEnumerable<Grade>> GetAllGrades([FromRoute] int id)
+        public ActionResult <IEnumerable<GradeDto>> GetAllGrades([FromRoute] int id)
         {
             var grades = _dbContext
                 .Grades
                 .Where(g => g.Student.StudentId == id)
+                .Include(g => g.Subject)
                 .ToList();
+
+            var gradesDtos = _mapper.Map<List<GradeDto>>(grades);
 
             if(grades is null)
             {
                 return NotFound();
             }
 
-            return Ok(grades);
+            return Ok(gradesDtos);
         }
     }
 }
