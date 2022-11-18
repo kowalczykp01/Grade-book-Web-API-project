@@ -22,6 +22,16 @@ namespace Grade_Book_API.Controllers
             _dbContext = dbContext;
             _mapper = mapper;
         }
+
+        [HttpPost]
+        public ActionResult AddStudent([FromBody] AddStudentDto dto)
+        {
+            var student = _mapper.Map<Student>(dto);
+            _dbContext.Students.Add(student);
+            _dbContext.SaveChanges();
+
+            return Created($"/api/gradebook/students/{student.StudentId}", null);
+        }
         [HttpGet("{id}")]
         public ActionResult <IEnumerable<GradeDto>> GetAllGrades([FromRoute] int id)
         {
