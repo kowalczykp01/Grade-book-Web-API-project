@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Grade_Book_API.Entities;
 using Grade_Book_API.Models;
+using Grade_Book_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,36 +15,26 @@ namespace Grade_Book_API.Controllers
     [Route("api/gradebook")]
     public class GradeBookController : ControllerBase
     {
-        private readonly GradeBookDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IGradeBookService _gradeBookService;
 
-        public GradeBookController(GradeBookDbContext dbContext, IMapper mapper)
+        public GradeBookController(IGradeBookService gradeBookService)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _gradeBookService = gradeBookService;
         }
 
         [HttpPost]
         public ActionResult AddStudent([FromBody] AddStudentDto dto)
         {
-            var student = _mapper.Map<Student>(dto);
-            _dbContext.Students.Add(student);
-            _dbContext.SaveChanges();
+            var id = _gradeBookService.Create(dto);
 
-            return Created($"/api/gradebook/students/{student.StudentId}", null);
+            return Created($"/api/gradebook/students/{id}", null);
         }
         [HttpGet("{id}")]
         public ActionResult <IEnumerable<GradeDto>> GetAllGrades([FromRoute] int id)
         {
-            var grades = _dbContext
-                .Grades
-                .Where(g => g.Student.StudentId == id)
-                .Include(g => g.Subject)
-                .ToList();
+            var gradesDtos = _gradeBookService.GetGradesById(id);
 
-            var gradesDtos = _mapper.Map<List<GradeDto>>(grades);
-
-            if(grades is null)
+            if(gradesDtos is null)
             {
                 return NotFound();
             }

@@ -1,5 +1,6 @@
 using Grade_Book_API;
 using Grade_Book_API.Entities;
+using Grade_Book_API.Services;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<GradeBookDbContext>();
 builder.Services.AddScoped<GradeBookSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddScoped<IGradeBookService, GradeBookService>();
 
 var app = builder.Build();
 
