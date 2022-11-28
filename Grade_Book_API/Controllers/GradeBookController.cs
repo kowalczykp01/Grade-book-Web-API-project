@@ -25,6 +25,11 @@ namespace Grade_Book_API.Controllers
         [HttpPost]
         public ActionResult AddStudent([FromBody] AddStudentDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var id = _gradeBookService.Create(dto);
 
             return Created($"/api/gradebook/students/{id}", null);
