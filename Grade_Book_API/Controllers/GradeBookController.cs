@@ -35,16 +35,16 @@ namespace Grade_Book_API.Controllers
             return Created($"/api/gradebook/students/{id}", null);
         }
         [HttpGet("{id}")]
-        public ActionResult <IEnumerable<GradeDto>> GetAllGrades([FromRoute] int id)
+        public ActionResult<StudentDto> GetStudent([FromRoute] int id)
         {
-            var gradesDtos = _gradeBookService.GetGradesById(id);
+            var studentDto = _gradeBookService.GetStudentById(id);
 
-            if(gradesDtos is null)
+            if(studentDto is null)
             {
                 return NotFound();
             }
 
-            return Ok(gradesDtos);
+            return Ok(studentDto);
         }
     }
 }

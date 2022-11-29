@@ -52,7 +52,7 @@ namespace Grade_Book_API.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Grades");
+                    b.ToTable("Grades", (string)null);
                 });
 
             modelBuilder.Entity("Grade_Book_API.Entities.Student", b =>
@@ -86,7 +86,7 @@ namespace Grade_Book_API.Migrations
 
                     b.HasKey("StudentId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Grade_Book_API.Entities.Subject", b =>
@@ -104,7 +104,7 @@ namespace Grade_Book_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
                 });
 
             modelBuilder.Entity("Grade_Book_API.Entities.Grade", b =>

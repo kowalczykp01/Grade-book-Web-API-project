@@ -17,6 +17,8 @@ namespace Grade_Book_API
                 .ForMember(m => m.Name, c => c.MapFrom(s => s.Subject.Name));
 
             CreateMap<AddStudentDto, Student>();
+
+            CreateMap<Student, StudentDto>();
         }
     }
 }

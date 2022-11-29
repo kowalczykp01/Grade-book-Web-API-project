@@ -13,7 +13,7 @@ namespace Grade_Book_API.Services
     public interface IGradeBookService
     {
         int Create(AddStudentDto dto);
-        List<GradeDto> GetGradesById(int id);
+        StudentDto GetStudentById(int id);
     }
 
     public class GradeBookService : IGradeBookService
@@ -26,20 +26,19 @@ namespace Grade_Book_API.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public List<GradeDto> GetGradesById(int id)
+        public StudentDto GetStudentById(int id)
         {
-            var grades = _dbContext
-                .Grades
-                .Where(g => g.Student.StudentId == id)
-                .Include(g => g.Subject)
-                .ToList();
+            var student = _dbContext
+                .Students
+                .Include(s => s.Grades)
+                .FirstOrDefault(s => s.StudentId == id);
 
-            if (grades is null)
+            if (student is null)
             {
                 return null;
             }
 
-            var result = _mapper.Map<List<GradeDto>>(grades);
+            var result = _mapper.Map<StudentDto>(student);
             return result;
         }
 
