@@ -34,17 +34,41 @@ namespace Grade_Book_API.Controllers
 
             return Created($"/api/gradebook/students/{id}", null);
         }
+
         [HttpGet("{id}")]
         public ActionResult<StudentDto> GetStudent([FromRoute] int id)
         {
             var studentDto = _gradeBookService.GetStudentById(id);
 
             if(studentDto is null)
-            {
                 return NotFound();
-            }
 
             return Ok(studentDto);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeleteStudent([FromRoute] int id)
+        {
+            var isDeleted = _gradeBookService.Delete(id);
+
+            if (isDeleted)
+                return NoContent();
+
+            return NotFound();
+        }
+
+        [HttpPut("{id}")]
+
+        public ActionResult UpdateStudent([FromRoute] int id, [FromBody] UpdateStudentDto dto)
+        {
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
+            var isUpdated = _gradeBookService.Update(id, dto);
+
+            if (!isUpdated) 
+                return NotFound();
+
+            return Ok();
         }
     }
 }

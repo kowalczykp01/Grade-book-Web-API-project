@@ -14,6 +14,8 @@ namespace Grade_Book_API.Services
     {
         int Create(AddStudentDto dto);
         StudentDto GetStudentById(int id);
+        bool Delete(int id);
+        bool Update(int id, UpdateStudentDto dto);
     }
 
     public class GradeBookService : IGradeBookService
@@ -33,10 +35,7 @@ namespace Grade_Book_API.Services
                 .Include(s => s.Grades)
                 .FirstOrDefault(s => s.StudentId == id);
 
-            if (student is null)
-            {
-                return null;
-            }
+            if (student is null) return null;
 
             var result = _mapper.Map<StudentDto>(student);
             return result;
@@ -49,6 +48,38 @@ namespace Grade_Book_API.Services
             _dbContext.SaveChanges();
 
             return student.StudentId;
+        }
+
+        public bool Delete(int id)
+        {
+            var student = _dbContext
+               .Students
+               .FirstOrDefault(s => s.StudentId == id);
+
+            if (student is null)  return false;
+
+            _dbContext.Students.Remove(student);
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool Update(int id, UpdateStudentDto dto)
+        {
+            var student = _dbContext
+               .Students
+               .FirstOrDefault(s => s.StudentId == id);
+
+            if (student is null) return false;
+
+            student.Surname = dto.Surname;
+            student.YearOfStudies = dto.YearOfStudies;
+            student.DegreeCourse = dto.DegreeCourse;
+            student.ContactEmail = dto.ContactEmail;
+
+            _dbContext.SaveChanges();
+
+            return true;
         }
     }
 }
