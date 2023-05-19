@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<GradeBookDbContext>();
 builder.Services.AddScoped<GradeBookSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddScoped<IGradeBookService, GradeBookService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 var app = builder.Build();
 

@@ -10,24 +10,24 @@ using System.Threading.Tasks;
 
 namespace Grade_Book_API.Services
 {
-    public interface IGradeBookService
+    public interface IStudentService
     {
-        int Create(AddStudentDto dto);
+        int CreateStudent(AddStudentDto dto);
         StudentDto GetStudentById(int id);
-        bool Delete(int id);
-        bool Update(int id, UpdateStudentDto dto);
+        bool DeleteStudent(int id);
+        bool UpdateStudent(int id, UpdateStudentDto dto);
     }
-
-    public class GradeBookService : IGradeBookService
+    public class StudentService : IStudentService
     {
         private readonly GradeBookDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public GradeBookService(GradeBookDbContext dbContext, IMapper mapper)
+        public StudentService(GradeBookDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
+
         public StudentDto GetStudentById(int id)
         {
             var student = _dbContext
@@ -42,7 +42,7 @@ namespace Grade_Book_API.Services
             return result;
         }
 
-        public int Create(AddStudentDto dto)
+        public int CreateStudent(AddStudentDto dto)
         {
             var student = _mapper.Map<Student>(dto);
             _dbContext.Students.Add(student);
@@ -51,13 +51,13 @@ namespace Grade_Book_API.Services
             return student.StudentId;
         }
 
-        public bool Delete(int id)
+        public bool DeleteStudent(int id)
         {
             var student = _dbContext
                .Students
                .FirstOrDefault(s => s.StudentId == id);
 
-            if (student is null)  return false;
+            if (student is null) return false;
 
             _dbContext.Students.Remove(student);
             _dbContext.SaveChanges();
@@ -65,7 +65,7 @@ namespace Grade_Book_API.Services
             return true;
         }
 
-        public bool Update(int id, UpdateStudentDto dto)
+        public bool UpdateStudent(int id, UpdateStudentDto dto)
         {
             var student = _dbContext
                .Students

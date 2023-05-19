@@ -12,14 +12,14 @@ using System.Threading.Tasks;
 
 namespace Grade_Book_API.Controllers
 {
-    [Route("api/gradebook")]
-    public class GradeBookController : ControllerBase
+    [Route("api/student")]
+    public class StudentController : ControllerBase
     {
-        private readonly IGradeBookService _gradeBookService;
+        private readonly IStudentService _studentService;
 
-        public GradeBookController(IGradeBookService gradeBookService)
+        public StudentController(IStudentService studentService)
         {
-            _gradeBookService = gradeBookService;
+            _studentService = studentService;
         }
 
         [HttpPost]
@@ -30,15 +30,15 @@ namespace Grade_Book_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var id = _gradeBookService.Create(dto);
+            var id = _studentService.CreateStudent(dto);
 
-            return Created($"/api/gradebook/students/{id}", null);
+            return Created($"/api/student/{id}", null);
         }
 
         [HttpGet("{id}")]
         public ActionResult<StudentDto> GetStudent([FromRoute] int id)
         {
-            var studentDto = _gradeBookService.GetStudentById(id);
+            var studentDto = _studentService.GetStudentById(id);
 
             if(studentDto is null)
                 return NotFound();
@@ -49,7 +49,7 @@ namespace Grade_Book_API.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteStudent([FromRoute] int id)
         {
-            var isDeleted = _gradeBookService.Delete(id);
+            var isDeleted = _studentService.DeleteStudent(id);
 
             if (isDeleted)
                 return NoContent();
@@ -63,7 +63,7 @@ namespace Grade_Book_API.Controllers
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
 
-            var isUpdated = _gradeBookService.Update(id, dto);
+            var isUpdated = _studentService.UpdateStudent(id, dto);
 
             if (!isUpdated) 
                 return NotFound();
