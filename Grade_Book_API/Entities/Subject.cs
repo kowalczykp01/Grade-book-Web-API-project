@@ -10,6 +10,7 @@ namespace Grade_Book_API.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public virtual List<Grade> Grades { get; set; }
+        public virtual ICollection<Grade> Grades { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
     }
 }

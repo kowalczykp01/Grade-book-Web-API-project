@@ -4,6 +4,7 @@ using Grade_Book_API.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grade_Book_API.Migrations
 {
     [DbContext(typeof(GradeBookDbContext))]
-    partial class GradeBookDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230518201821_ChangeListToICollectionInStudent")]
+    partial class ChangeListToICollectionInStudent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,21 +109,6 @@ namespace Grade_Book_API.Migrations
                     b.ToTable("Subjects");
                 });
 
-            modelBuilder.Entity("StudentSubject", b =>
-                {
-                    b.Property<int>("StudentsStudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubjectsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("StudentsStudentId", "SubjectsId");
-
-                    b.HasIndex("SubjectsId");
-
-                    b.ToTable("StudentSubject");
-                });
-
             modelBuilder.Entity("Grade_Book_API.Entities.Grade", b =>
                 {
                     b.HasOne("Grade_Book_API.Entities.Student", "Student")
@@ -139,21 +126,6 @@ namespace Grade_Book_API.Migrations
                     b.Navigation("Student");
 
                     b.Navigation("Subject");
-                });
-
-            modelBuilder.Entity("StudentSubject", b =>
-                {
-                    b.HasOne("Grade_Book_API.Entities.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsStudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Grade_Book_API.Entities.Subject", null)
-                        .WithMany()
-                        .HasForeignKey("SubjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Grade_Book_API.Entities.Student", b =>
