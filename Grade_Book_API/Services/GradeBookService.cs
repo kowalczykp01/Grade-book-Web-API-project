@@ -33,7 +33,6 @@ namespace Grade_Book_API.Services
             var student = _dbContext
                 .Students
                 .Include(s => s.Grades)
-                .Include(s => s.Subjects)
                 .FirstOrDefault(s => s.StudentId == id);
 
             if (student is null) return null;
