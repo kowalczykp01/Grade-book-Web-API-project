@@ -21,66 +21,39 @@ namespace Grade_Book_API
             {
                 if (!_dbContext.Students.Any())
                 {
-                    var students = GetStudents();
-                    _dbContext.Students.AddRange(students);
-                    _dbContext.SaveChanges();
-                }
+                    var subjects = new List<Subject>
+                    {
+                        new Subject { Name = "Mathematics" },
+                        new Subject { Name = "Physics" },
+                        new Subject { Name = "Chemistry" }
+                    };
 
-                if (!_dbContext.Subjects.Any())
-                {
-                    var subjects = GetSubjects();
                     _dbContext.Subjects.AddRange(subjects);
                     _dbContext.SaveChanges();
-                }
-            }
-        }
 
-        private IEnumerable<Student> GetStudents()
-        {
-            var students = new List<Student>()
-            {
-                new Student()
-                {
-                    FirstName = "Paweł",
-                    Surname = "Kowalczyk",
-                    DegreeCourse = "Computer Science",
-                    YearOfStudies = 3,
-                    ContactEmail = "pawelkowalczyk@email.com",
-                    Grades = new List<Grade>()
+                    var student = new Student
                     {
-                        new Grade()
-                        {
-                            Value = 80,
-                            SubjectId = 1002,
-                            Description = "Final exam",
-                            DateOfIssue = new DateTime(2022,10, 28)
-                        },
-                        new Grade()
-                        {
-                            Value = 95,
-                            SubjectId = 1003,
-                            Description = "Homework",
-                            DateOfIssue = new DateTime(2022,10, 22)
-                        }
-                    }
-                }
-            };
-            return students;
-        }
-        private IEnumerable<Subject> GetSubjects()
-        {
-            var subjects = new List<Subject>()
-            {
-                new Subject()
-                {
-                    Name = "Linear algebra"
-                },
-                new Subject()
-                {
-                    Name = "Numerical methods"
-                }
-            };
-            return subjects;
-        }
+                        FirstName = "John",
+                        Surname = "Doe",
+                        DegreeCourse = "Computer Science",
+                        YearOfStudies = 3,
+                        ContactEmail = "john.doe@example.com",
+                        Subjects = subjects
+                    };
+
+                    var grades = new List<Grade>
+                    {
+                        new Grade { DateOfIssue = DateTime.Now, Description = "Grade 1", Value = 90, Subject = subjects.ElementAt(0), Student = student },
+                        new Grade { DateOfIssue = DateTime.Now, Description = "Grade 2", Value = 80, Subject = subjects.ElementAt(0), Student = student },
+                        new Grade { DateOfIssue = DateTime.Now, Description = "Grade 3", Value = 95, Subject = subjects.ElementAt(1), Student = student }
+                    };
+
+                    student.Grades = grades;
+
+                    _dbContext.Students.Add(student);
+                    _dbContext.SaveChanges();
+                }                
+            }
+        }        
     }
 }
