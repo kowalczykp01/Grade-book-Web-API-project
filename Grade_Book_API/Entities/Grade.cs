@@ -12,8 +12,11 @@ namespace Grade_Book_API.Entities
         public DateTime DateOfIssue { get; set; }
         public string Description { get; set; }
         public int Value { get; set; }
-        public int SubjectId { get; set; }
+        public int StudentId { get; set; }
         public virtual Student Student { get; set; }
+        public int SubjectId { get; set; }
         public virtual Subject Subject { get; set; }
+        
+        
     }
 }

@@ -21,6 +21,8 @@ namespace Grade_Book_API
             CreateMap<Student, StudentDto>();
 
             CreateMap<UpdateStudentDto, Student>();
+
+            CreateMap<Subject, SubjectDto>();
         }
     }
 }

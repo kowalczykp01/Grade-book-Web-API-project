@@ -15,6 +15,8 @@ namespace Grade_Book_API.Entities
         public int YearOfStudies { get; set; }
         public string ContactEmail { get; set; }
 
-        public virtual List<Grade> Grades { get; set; }
+        public virtual ICollection<Subject> Subjects { get; set; }
+        public virtual ICollection<Grade> Grades { get; set; }
+        
     }
 }
