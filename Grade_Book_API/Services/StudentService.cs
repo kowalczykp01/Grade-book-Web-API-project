@@ -73,10 +73,17 @@ namespace Grade_Book_API.Services
 
             if (student is null) return false;
 
-            student.Surname = dto.Surname;
-            student.YearOfStudies = dto.YearOfStudies;
-            student.DegreeCourse = dto.DegreeCourse;
-            student.ContactEmail = dto.ContactEmail;
+            if (!string.IsNullOrEmpty(dto.Surname))
+                student.Surname = dto.Surname;
+
+            if(!(dto.YearOfStudies == 0))
+                student.YearOfStudies = dto.YearOfStudies;
+
+            if(!string.IsNullOrEmpty(dto.DegreeCourse))
+                student.DegreeCourse = dto.DegreeCourse;
+
+            if(!string.IsNullOrEmpty(dto.ContactEmail))
+                student.ContactEmail = dto.ContactEmail;
 
             _dbContext.SaveChanges();
 
