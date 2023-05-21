@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 namespace Grade_Book_API.Controllers
 {
     [Route("api/student")]
+    [ApiController]
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
@@ -25,11 +26,6 @@ namespace Grade_Book_API.Controllers
         [HttpPost]
         public ActionResult AddStudent([FromBody] AddStudentDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var id = _studentService.CreateStudent(dto);
 
             return Created($"/api/student/{id}", null);
@@ -40,33 +36,22 @@ namespace Grade_Book_API.Controllers
         {
             var studentDto = _studentService.GetStudentById(id);
 
-            if(studentDto is null)
-                return NotFound();
-
             return Ok(studentDto);
         }
 
         [HttpDelete("{id}")]
         public ActionResult DeleteStudent([FromRoute] int id)
         {
-            var isDeleted = _studentService.DeleteStudent(id);
+            _studentService.DeleteStudent(id);
 
-            if (isDeleted)
-                return NoContent();
-
-            return NotFound();
+            return NoContent();
         }
 
         [HttpPut("{id}")]
 
         public ActionResult UpdateStudent([FromRoute] int id, [FromBody] UpdateStudentDto dto)
         {
-            if(!ModelState.IsValid) return BadRequest(ModelState);
-
-            var isUpdated = _studentService.UpdateStudent(id, dto);
-
-            if (!isUpdated) 
-                return NotFound();
+            _studentService.UpdateStudent(id, dto);
 
             return Ok();
         }

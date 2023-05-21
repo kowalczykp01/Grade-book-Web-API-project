@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Grade_Book_API.Entities;
+using Grade_Book_API.Exceptions;
 using Grade_Book_API.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,18 +15,20 @@ namespace Grade_Book_API.Services
     {
         int CreateStudent(AddStudentDto dto);
         StudentDto GetStudentById(int id);
-        bool DeleteStudent(int id);
-        bool UpdateStudent(int id, UpdateStudentDto dto);
+        void DeleteStudent(int id);
+        void UpdateStudent(int id, UpdateStudentDto dto);
     }
     public class StudentService : IStudentService
     {
         private readonly GradeBookDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly ILogger<StudentService> _logger;
 
-        public StudentService(GradeBookDbContext dbContext, IMapper mapper)
+        public StudentService(GradeBookDbContext dbContext, IMapper mapper, ILogger<StudentService> logger)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public StudentDto GetStudentById(int id)
@@ -36,7 +39,8 @@ namespace Grade_Book_API.Services
                 .Include(s => s.Subjects)
                 .FirstOrDefault(s => s.StudentId == id);
 
-            if (student is null) return null;
+            if (student is null)
+                throw new NotFoundException("Student not found");
 
             var result = _mapper.Map<StudentDto>(student);
             return result;
@@ -51,27 +55,29 @@ namespace Grade_Book_API.Services
             return student.StudentId;
         }
 
-        public bool DeleteStudent(int id)
+        public void DeleteStudent(int id)
         {
+            _logger.LogWarning($"Student with id: {id} DELETE action invoked");
+
             var student = _dbContext
                .Students
                .FirstOrDefault(s => s.StudentId == id);
 
-            if (student is null) return false;
+            if (student is null)
+                throw new NotFoundException("Student not found");
 
             _dbContext.Students.Remove(student);
             _dbContext.SaveChanges();
-
-            return true;
         }
 
-        public bool UpdateStudent(int id, UpdateStudentDto dto)
+        public void UpdateStudent(int id, UpdateStudentDto dto)
         {
             var student = _dbContext
                .Students
                .FirstOrDefault(s => s.StudentId == id);
 
-            if (student is null) return false;
+            if (student is null)
+                throw new NotFoundException("Student not found");
 
             if (!string.IsNullOrEmpty(dto.Surname))
                 student.Surname = dto.Surname;
@@ -86,8 +92,6 @@ namespace Grade_Book_API.Services
                 student.ContactEmail = dto.ContactEmail;
 
             _dbContext.SaveChanges();
-
-            return true;
         }
     }
 }
