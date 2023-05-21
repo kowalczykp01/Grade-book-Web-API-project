@@ -1,17 +1,21 @@
 using Grade_Book_API;
 using Grade_Book_API.Entities;
+using Grade_Book_API.Middleware;
 using Grade_Book_API.Services;
+using NLog.Web;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Host.UseNLog();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<GradeBookDbContext>();
 builder.Services.AddScoped<GradeBookSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();
 
@@ -26,6 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
