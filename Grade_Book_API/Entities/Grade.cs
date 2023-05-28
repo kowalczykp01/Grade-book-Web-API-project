@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Grade_Book_API.Entities
+﻿namespace Grade_Book_API.Entities
 {
     public class Grade
     {
@@ -15,8 +9,6 @@ namespace Grade_Book_API.Entities
         public int StudentId { get; set; }
         public virtual Student Student { get; set; }
         public int SubjectId { get; set; }
-        public virtual Subject Subject { get; set; }
-        
-        
+        public virtual Subject Subject { get; set; }             
     }
 }

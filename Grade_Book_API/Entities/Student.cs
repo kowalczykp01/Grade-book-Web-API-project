@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Grade_Book_API.Entities
+﻿namespace Grade_Book_API.Entities
 {
     public class Student
     {
@@ -17,6 +11,6 @@ namespace Grade_Book_API.Entities
 
         public virtual ICollection<Subject> Subjects { get; set; }
         public virtual ICollection<Grade> Grades { get; set; }
-        
+        public virtual ICollection<FinalGrade> FinalGrades { get; set; }
     }
 }
