@@ -13,8 +13,7 @@ namespace Grade_Book_API
     {
         public GradeBookMappingProfile()
         {
-            CreateMap<Grade, GradeDto>()
-                .ForMember(m => m.Name, c => c.MapFrom(s => s.Subject.Name));
+            CreateMap<Grade, GradeDto>();
 
             CreateMap<AddStudentDto, Student>();
 
@@ -23,6 +22,8 @@ namespace Grade_Book_API
             CreateMap<UpdateStudentDto, Student>();
 
             CreateMap<Subject, SubjectDto>();
+
+            CreateMap<Subject, SubjectWithGradesDto>();
         }
     }
 }
