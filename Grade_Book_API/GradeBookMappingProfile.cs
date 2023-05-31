@@ -24,6 +24,11 @@ namespace Grade_Book_API
             CreateMap<Subject, SubjectDto>();
 
             CreateMap<Subject, SubjectWithGradesDto>();
+
+            CreateMap<FinalGrade, FinalGradeDto>()
+                .ForMember(m => m.SubjectName, c => c.MapFrom(s => s.Subject.Name));
+
+            CreateMap<AddFinalGradeDto, FinalGrade>();
         }
     }
 }
