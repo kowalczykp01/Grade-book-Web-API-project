@@ -2,6 +2,7 @@
 using Grade_Book_API.Entities;
 using Grade_Book_API.Exceptions;
 using Grade_Book_API.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,12 +25,14 @@ namespace Grade_Book_API.Services
         private readonly GradeBookDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly ILogger<StudentService> _logger;
+        private readonly IPasswordHasher<Student> _passwordHasher;
 
-        public StudentService(GradeBookDbContext dbContext, IMapper mapper, ILogger<StudentService> logger)
+        public StudentService(GradeBookDbContext dbContext, IMapper mapper, ILogger<StudentService> logger, IPasswordHasher<Student> passwordHasher)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _logger = logger;
+            _passwordHasher = passwordHasher;
         }
         public void RegisterStudent(RegisterStudentDto dto)
         {
@@ -40,10 +43,10 @@ namespace Grade_Book_API.Services
                 DegreeCourse = dto.DegreeCourse,
                 YearOfStudies = dto.YearOfStudies,
                 ContactEmail = dto.ContactEmail,
-                PasswordHash = dto.Password,
                 RoleId = dto.RoleId
             };
-
+            var hashedPassword = _passwordHasher.HashPassword(newStudent, dto.Password);
+            newStudent.PasswordHash = hashedPassword;
             _dbContext.Students.Add(newStudent);
             _dbContext.SaveChanges();
         }
