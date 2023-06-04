@@ -9,7 +9,7 @@
         public int YearOfStudies { get; set; }
         public string ContactEmail { get; set; }
         public string PasswordHash { get; set; }
-        public int RoleId { get; } = 1;
+        public int RoleId { get; set; }
         public virtual Role Role { get; set; }
 
         public virtual ICollection<Subject> Subjects { get; set; }

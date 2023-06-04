@@ -45,7 +45,7 @@ namespace Grade_Book_API.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("FinalGrades");
+                    b.ToTable("FinalGrades", (string)null);
                 });
 
             modelBuilder.Entity("Grade_Book_API.Entities.Grade", b =>
@@ -78,7 +78,7 @@ namespace Grade_Book_API.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Grades");
+                    b.ToTable("Grades", (string)null);
                 });
 
             modelBuilder.Entity("Grade_Book_API.Entities.Role", b =>
@@ -95,7 +95,7 @@ namespace Grade_Book_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Grade_Book_API.Entities.Student", b =>
@@ -123,7 +123,7 @@ namespace Grade_Book_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId1")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Surname")
@@ -136,9 +136,9 @@ namespace Grade_Book_API.Migrations
 
                     b.HasKey("StudentId");
 
-                    b.HasIndex("RoleId1");
+                    b.HasIndex("RoleId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Grade_Book_API.Entities.Subject", b =>
@@ -156,7 +156,7 @@ namespace Grade_Book_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
                 });
 
             modelBuilder.Entity("StudentSubject", b =>
@@ -171,7 +171,7 @@ namespace Grade_Book_API.Migrations
 
                     b.HasIndex("SubjectsId");
 
-                    b.ToTable("StudentSubject");
+                    b.ToTable("StudentSubject", (string)null);
                 });
 
             modelBuilder.Entity("Grade_Book_API.Entities.FinalGrade", b =>
@@ -216,7 +216,7 @@ namespace Grade_Book_API.Migrations
                 {
                     b.HasOne("Grade_Book_API.Entities.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId1")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
