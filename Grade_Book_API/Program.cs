@@ -1,6 +1,10 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Grade_Book_API;
 using Grade_Book_API.Entities;
 using Grade_Book_API.Middleware;
+using Grade_Book_API.Models;
+using Grade_Book_API.Models.Validators;
 using Grade_Book_API.Services;
 using Microsoft.AspNetCore.Identity;
 using NLog.Web;
@@ -11,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Host.UseNLog();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddDbContext<GradeBookDbContext>();
 builder.Services.AddScoped<GradeBookSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -20,6 +24,7 @@ builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IFinalGradeService, FinalGradeService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
+builder.Services.AddScoped<IValidator<RegisterStudentDto>, RegisterStudentDtoValidator>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 builder.Services.AddSwaggerGen();
 

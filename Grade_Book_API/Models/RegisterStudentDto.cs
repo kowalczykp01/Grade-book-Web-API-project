@@ -13,11 +13,9 @@ namespace Grade_Book_API.Models
         public string Surname { get; set; }
         public string DegreeCourse { get; set; }
         public int YearOfStudies { get; set; }
-        [Required]
         public string ContactEmail { get; set; }
-        [Required]
-        [MinLength(6)]
         public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
         public int RoleId { get; set; } = 1;
     }
 }
