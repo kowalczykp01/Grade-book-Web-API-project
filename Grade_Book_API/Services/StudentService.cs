@@ -17,6 +17,7 @@ namespace Grade_Book_API.Services
         StudentDto GetStudentById(int id);
         void DeleteStudent(int id);
         void UpdateStudent(int id, UpdateStudentDto dto);
+        void RegisterStudent(RegisterStudentDto dto);
     }
     public class StudentService : IStudentService
     {
@@ -29,6 +30,22 @@ namespace Grade_Book_API.Services
             _dbContext = dbContext;
             _mapper = mapper;
             _logger = logger;
+        }
+        public void RegisterStudent(RegisterStudentDto dto)
+        {
+            var newStudent = new Student()
+            {
+                FirstName = dto.FirstName,
+                Surname = dto.Surname,
+                DegreeCourse = dto.DegreeCourse,
+                YearOfStudies = dto.YearOfStudies,
+                ContactEmail = dto.ContactEmail,
+                PasswordHash = dto.Password,
+                RoleId = dto.RoleId
+            };
+
+            _dbContext.Students.Add(newStudent);
+            _dbContext.SaveChanges();
         }
 
         public StudentDto GetStudentById(int id)

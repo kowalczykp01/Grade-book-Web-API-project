@@ -22,6 +22,12 @@ namespace Grade_Book_API.Controllers
         {
             _studentService = studentService;
         }
+        [HttpPost("register")]
+        public ActionResult RegisterStudent([FromBody] RegisterStudentDto dto)
+        {
+            _studentService.RegisterStudent(dto);
+            return Ok();
+        }
 
         [HttpPost]
         public ActionResult AddStudent([FromBody] AddStudentDto dto)
