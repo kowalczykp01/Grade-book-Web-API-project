@@ -4,10 +4,14 @@ using Grade_Book_API.Exceptions;
 using Grade_Book_API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace Grade_Book_API.Services
@@ -19,6 +23,7 @@ namespace Grade_Book_API.Services
         void DeleteStudent(int id);
         void UpdateStudent(int id, UpdateStudentDto dto);
         void RegisterStudent(RegisterStudentDto dto);
+        string GenerateJwt(LoginDto dto);
     }
     public class StudentService : IStudentService
     {
@@ -26,13 +31,15 @@ namespace Grade_Book_API.Services
         private readonly IMapper _mapper;
         private readonly ILogger<StudentService> _logger;
         private readonly IPasswordHasher<Student> _passwordHasher;
+        private readonly AuthenticationSettings _authenticationSettings;
 
-        public StudentService(GradeBookDbContext dbContext, IMapper mapper, ILogger<StudentService> logger, IPasswordHasher<Student> passwordHasher)
+        public StudentService(GradeBookDbContext dbContext, IMapper mapper, ILogger<StudentService> logger, IPasswordHasher<Student> passwordHasher, AuthenticationSettings authenticationSettings)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _logger = logger;
             _passwordHasher = passwordHasher;
+            _authenticationSettings = authenticationSettings;
         }
         public void RegisterStudent(RegisterStudentDto dto)
         {
@@ -111,6 +118,46 @@ namespace Grade_Book_API.Services
                 student.ContactEmail = dto.ContactEmail;
 
             _dbContext.SaveChanges();
+        }
+
+        public string GenerateJwt(LoginDto dto)
+        {
+            var student = _dbContext.
+                Students.
+                Include(s => s.Role)
+                .FirstOrDefault(s => s.ContactEmail == dto.ContactEmail);
+
+            if (student is null)
+            {
+                throw new BadRequestException("Invalid username or password");
+            }
+
+            var result = _passwordHasher.VerifyHashedPassword(student, student.PasswordHash, dto.Password);
+
+            if (result == PasswordVerificationResult.Failed)
+            {
+                throw new BadRequestException("Invalid username or password");
+            }
+
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, student.RoleId.ToString()),
+                new Claim(ClaimTypes.Name, $"{student.FirstName} {student.Surname}"),
+                new Claim(ClaimTypes.Role, $"{student.Role.Name}"),
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
+
+            var token = new JwtSecurityToken(_authenticationSettings.JwtIssuer,
+                _authenticationSettings.JwtIssuer,
+                claims,
+                expires: expires,
+                signingCredentials: cred);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(token);
         }
     }
 }

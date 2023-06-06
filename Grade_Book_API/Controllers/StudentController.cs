@@ -29,6 +29,13 @@ namespace Grade_Book_API.Controllers
             return Ok();
         }
 
+        [HttpPost("login")]
+        public ActionResult Login([FromBody]LoginDto dto)
+        {
+            string token = _studentService.GenerateJwt(dto);
+
+            return Ok(token);
+        }
         [HttpPost]
         public ActionResult AddStudent([FromBody] AddStudentDto dto)
         {
