@@ -1,4 +1,5 @@
 ﻿using Grade_Book_API.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,12 @@ namespace Grade_Book_API
         {
             if (_dbContext.Database.CanConnect())
             {
+                var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+
+                if (pendingMigrations!=null && pendingMigrations.Any())
+                {
+                    _dbContext.Database.Migrate();
+                }
                 if (!_dbContext.Students.Any())
                 {
                     var subjects = new List<Subject>
@@ -38,6 +45,8 @@ namespace Grade_Book_API
                         DegreeCourse = "Computer Science",
                         YearOfStudies = 3,
                         ContactEmail = "john.doe@example.com",
+                        PasswordHash = "zahaszowanehaslo",
+                        RoleId = 1,
                         Subjects = subjects
                     };
 
