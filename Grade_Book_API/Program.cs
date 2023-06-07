@@ -7,6 +7,7 @@ using Grade_Book_API.Models;
 using Grade_Book_API.Models.Validators;
 using Grade_Book_API.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NLog.Web;
 using System.Reflection;
@@ -40,7 +41,7 @@ builder.Services.AddAuthentication(option =>
 });
 
 builder.Services.AddControllers().AddFluentValidation();
-builder.Services.AddDbContext<GradeBookDbContext>();
+builder.Services.AddDbContext<GradeBookDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("GradeBookDbConnection")));
 builder.Services.AddScoped<GradeBookSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IStudentService, StudentService>();

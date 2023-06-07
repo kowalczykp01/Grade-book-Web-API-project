@@ -4,8 +4,10 @@ namespace Grade_Book_API.Entities
 {
     public class GradeBookDbContext : DbContext
     {
-        private string _connectionString =
-            "Server=(localdb)\\mssqllocaldb;Database=GradeBookDb;Trusted_Connection=True;";
+        public GradeBookDbContext(DbContextOptions<GradeBookDbContext> options) : base(options)
+        {
+
+        }
         public DbSet<Student> Students { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Grade> Grades { get; set; }
@@ -29,11 +31,6 @@ namespace Grade_Book_API.Entities
                .Property(s => s.Name)
                .IsRequired()
                .HasMaxLength(35);
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_connectionString);
-        }
+        }      
     }
 }
