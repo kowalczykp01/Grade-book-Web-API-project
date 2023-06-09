@@ -69,6 +69,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseMiddleware<RequestTimeMiddleware>();
 
+app.UseAuthentication();
+
 app.UseHttpsRedirection();
 
 app.UseSwagger();
@@ -81,6 +83,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

@@ -1,5 +1,6 @@
 ﻿using Grade_Book_API.Models;
 using Grade_Book_API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace Grade_Book_API.Controllers
         }
 
         [HttpGet("{studentId}")]
+        [Authorize(Roles = "Student")]
         public ActionResult<FinalGradeDto> GetAll([FromRoute] int studentId)
         {
             List<FinalGradeDto> finalGrades = _finalGradeService.GetAllFinalGrades(studentId);

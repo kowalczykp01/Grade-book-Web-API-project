@@ -2,6 +2,7 @@
 using Grade_Book_API.Entities;
 using Grade_Book_API.Models;
 using Grade_Book_API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -45,6 +46,7 @@ namespace Grade_Book_API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Student")]
         public ActionResult<StudentDto> GetStudent([FromRoute] int id)
         {
             var studentDto = _studentService.GetStudentById(id);

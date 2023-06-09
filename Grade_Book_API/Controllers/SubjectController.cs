@@ -1,5 +1,6 @@
 ﻿using Grade_Book_API.Models;
 using Grade_Book_API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace Grade_Book_API.Controllers
             _subjectService = subjectService;
         }
         [HttpGet("grades/{studentId}")]
+        [Authorize(Roles = "Student")]
         public ActionResult<SubjectWithGradesDto> GetAllWithGrades([FromRoute] int studentId)
         {
             List<SubjectWithGradesDto> subjects = _subjectService.GetAllSubjectsWithGrades(studentId);
