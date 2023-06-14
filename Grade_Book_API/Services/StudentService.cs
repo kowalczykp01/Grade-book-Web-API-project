@@ -141,7 +141,7 @@ namespace Grade_Book_API.Services
 
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, student.RoleId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, student.StudentId.ToString()),
                 new Claim(ClaimTypes.Name, $"{student.FirstName} {student.Surname}"),
                 new Claim(ClaimTypes.Role, $"{student.Role.Name}"),
             };
