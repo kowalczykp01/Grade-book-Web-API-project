@@ -52,12 +52,21 @@ builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
 builder.Services.AddScoped<IValidator<RegisterStudentDto>, RegisterStudentDtoValidator>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontEndClient", policyBuilder =>
+        policyBuilder.AllowAnyMethod()
+        .AllowAnyHeader()
+        .WithOrigins(builder.Configuration["AllowedOrigins"])
+        );
+});
 
 var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<GradeBookSeeder>();
 
+app.UseCors("FrontEndClient");
 seeder.Seed();
 
 if (app.Environment.IsDevelopment())
