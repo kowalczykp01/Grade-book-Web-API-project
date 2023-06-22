@@ -8,3 +8,5 @@ API provides:
 * creating, reading, updating and deleting students accounts, students grades and subjects,
 * authentication via JWT
 * authorization
+
+It is hosted on Azure: https://gradebook-api-app.azurewebsites.net/swagger/index.html
