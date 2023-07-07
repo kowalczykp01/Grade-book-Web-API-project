@@ -9,4 +9,3 @@ API provides:
 * authentication via JWT
 * authorization
 
-It is hosted on Azure: https://gradebook-api-app.azurewebsites.net/swagger/index.html
